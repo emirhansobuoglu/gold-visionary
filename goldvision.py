@@ -12,6 +12,7 @@ driver.get(URL)
 
 time.sleep(5)
 goldData = driver.find_elements(By.CSS_SELECTOR,".datatable_cell__LJp3C")
+time.sleep(1)
 for td in goldData:
    if "%" not in td.text:
       print(td.text)
