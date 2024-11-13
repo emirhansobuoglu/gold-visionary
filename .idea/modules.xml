@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/GoldVisionary.iml" filepath="$PROJECT_DIR$/.idea/GoldVisionary.iml" />
       <module fileurl="file://$USER_HOME$/PycharmProjects/goldguess/.idea/goldguess.iml" filepath="$USER_HOME$/PycharmProjects/goldguess/.idea/goldguess.iml" />
+      <module fileurl="file://$USER_HOME$/PycharmProjects/pythonProject/.idea/pythonProject.iml" filepath="$USER_HOME$/PycharmProjects/pythonProject/.idea/pythonProject.iml" />
     </modules>
   </component>
 </project>

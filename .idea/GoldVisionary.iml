@@ -7,5 +7,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="goldguess" />
+    <orderEntry type="module" module-name="pythonProject" />
   </component>
 </module>

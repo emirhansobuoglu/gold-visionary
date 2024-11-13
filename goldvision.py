@@ -1,17 +1,81 @@
 import time
-
-import selenium
+from fileinput import close
+from operator import index
+from pydoc import classname
+from types import NoneType
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+import pandas as pd
+from selenium.common.exceptions import TimeoutException
 
 driver = webdriver.Chrome()
-driver.set_window_size(1920, 1080)
-driver.set_window_position(0, 0)
+driver.maximize_window()
 URL = "https://tr.investing.com/currencies/gau-try-historical-data"
-driver.get(URL)
+data_list = []
 
-time.sleep(5)
+def close_popup(second):
+    try:
+        close_button = WebDriverWait(driver, second).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "svg[data-test='sign-up-dialog-close-button']"))
+        )
+        close_button.click()
+    except TimeoutException:
+        pass
+
+
+driver.get(URL)
+close_popup(5)
+scroll_amount = 10
+pause_time = 0.05
+
+thisDay = datetime.now()
+thisDate = thisDay.strftime("%d.%m.%Y")
+print(thisDate)
+for _ in range(75):
+    driver.execute_script(f"window.scrollBy(0, {scroll_amount});")
+    time.sleep(pause_time)
+
+close_popup(5)
+try:
+    dateBox = WebDriverWait(driver, 20).until(
+        EC.element_to_be_clickable((By.XPATH, f"//div[contains(text(), '- {thisDate}')]"))
+    )
+    dateBox.click()
+    close_popup(1)
+    time.sleep(1)
+    firstDateBox = WebDriverWait(driver, 20).until(
+        EC.presence_of_element_located((By.XPATH, '(//input[@type="date" and @max="2024-11-13"])[1]'))
+    )
+    firstDateBox.click()
+    close_popup(1)
+    for i in range(700):
+        firstDateBox.send_keys(Keys.ARROW_UP)
+    time.sleep(1)
+    apply_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//span[text()='Uygula']")))
+    close_popup(1)
+    apply_button.click()
+    print("Butona başarıyla tıklandı.")
+except:
+    print("Butona tıklanamadı:")
+
+close_popup(5)
 goldData = driver.find_elements(By.CSS_SELECTOR,".datatable_cell__LJp3C")
-for td in goldData:
-   if "%" not in td.text:
-      print(td.text)
+for i in range(26, len(goldData), 1):
+    if "%" not in goldData[i].text and "%" not in goldData[i+1].text:
+        close_popup(0)
+        try:
+            tarih = goldData[i].text
+            fiyat= goldData[i + 1].text
+            data_list.append({"Tarih": tarih, "Fiyat": fiyat})
+        except (ValueError, IndexError) as e:
+            print(f"Veri işlenemedi: {e}")
+            continue
+close_popup(3)
+df = pd.DataFrame(data_list)
+
+df.to_csv('altin_verileri.csv', index=False)
