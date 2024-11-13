@@ -81,4 +81,4 @@ while firstDate >= endDate:
         print(f"Veri çekme hatası - Tarih: {firstDate.strftime(date_format)}")
 
     firstDate -= relativedelta(days=1)
-time.sleep(5)
+time.sleep(4)
