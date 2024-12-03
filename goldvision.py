@@ -35,7 +35,7 @@ pause_time = 0.05
 
 thisDay = datetime.now()
 thisDate = thisDay.strftime("%d.%m.%Y")
-thisDate2 = thisDay.strftime("%Y-%m-%d")
+thisDate2 = (thisDay - relativedelta(months=1)).strftime("%Y-%m-%d")
 print(thisDate)
 for _ in range(75):
     driver.execute_script(f"window.scrollBy(0, {scroll_amount});")
@@ -50,7 +50,7 @@ try:
     close_popup(1)
     time.sleep(1)
     firstDateBox = WebDriverWait(driver, 20).until(
-        EC.presence_of_element_located((By.XPATH, f'(//input[@type="date" and @max="{thisDate2}"])[1]'))
+        EC.presence_of_element_located((By.XPATH, f'(//input[@type="date" and @value="{thisDate2}"])[1]'))
     )
     firstDateBox.click()
     close_popup(1)
